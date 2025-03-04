@@ -34,7 +34,7 @@ pipeline {
                     """
 
                 
-                    sh "docker tag $IMAGE_NAME:latest $ECR_REPO:latest"
+                    sh "sudo docker tag $IMAGE_NAME:latest $ECR_REPO:latest"
 
               
                     sh "docker push $ECR_REPO:latest"
