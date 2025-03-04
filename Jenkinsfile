@@ -34,10 +34,10 @@ pipeline {
                     """
 
                 
-                    sh "docker tag $IMAGE_NAME:latest $ECR_REPO:1.1"
+                    sh "sudo docker tag $IMAGE_NAME:latest $ECR_REPO:1.1"
 
               
-                    sh "docker push $ECR_REPO:1.1"
+                    sh "sudo docker push $ECR_REPO:1.1"
                 }
             }
         }
