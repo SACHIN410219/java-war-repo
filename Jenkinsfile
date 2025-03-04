@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'sachin' }
+    agent any
     environment {
         AWS_REGION = 'us-east-1' 
         ECR_REPO = '879381244497.dkr.ecr.us-east-1.amazonaws.com/jenkins-build' 
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "sudo docker build -t $IMAGE_NAME ."
+                sh "docker build -t $IMAGE_NAME ."
             }
         }
 
