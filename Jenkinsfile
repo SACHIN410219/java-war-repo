@@ -31,8 +31,8 @@ pipeline {
                 script {
                     sh '''
                     aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
-                    docker tag $IMAGE_NAME:latest $ECR_REPO/$IMAGE_NAME:latest
-                    docker push $ECR_REPO/$IMAGE_NAME:latest
+                    docker tag $IMAGE_NAME:latest $ECR_REPO/$IMAGE_NAME
+                    docker push $ECR_REPO/$IMAGE_NAME
                     '''
                 }
             }
