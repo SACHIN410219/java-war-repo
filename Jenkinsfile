@@ -22,7 +22,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $IMAGE_NAME ."
+                sh "sudo docker build -t $IMAGE_NAME ."
             }
         }
 
@@ -35,10 +35,10 @@ pipeline {
                     """
 
                     // Tag the image
-                    sh "docker tag $IMAGE_NAME $ECR_REPO:1.1"
+                    sh "sudo docker tag $IMAGE_NAME $ECR_REPO:1.1"
 
                     // Push the image
-                    sh "docker push $ECR_REPO:1.1"
+                    sh "sudo docker push $ECR_REPO:1.1"
                 }
             }
         }
