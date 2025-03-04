@@ -1,5 +1,6 @@
 pipeline {
     agent { label 'sachin' }
+
     environment {
         AWS_REGION = 'us-east-1' 
         ECR_REPO = '879381244497.dkr.ecr.us-east-1.amazonaws.com/jenkins-build' 
@@ -15,29 +16,29 @@ pipeline {
 
         stage('Build Java Application') {
             steps {
-                sh 'mvn clean package -DskipTests' 
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "sudo docker build -t $IMAGE_NAME ."
+                sh "docker build -t $IMAGE_NAME ."
             }
         }
 
         stage('Push Image to AWS ECR') {
             steps {
                 script {
-                    
+                    // Authenticate with AWS ECR
                     sh """
                     aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
                     """
 
-                
-                    sh "sudo docker tag $IMAGE_NAME:latest $ECR_REPO:1.1"
+                    // Tag the image
+                    sh "docker tag $IMAGE_NAME $ECR_REPO:1.1"
 
-              
-                    sh "sudo docker push $ECR_REPO:1.1"
+                    // Push the image
+                    sh "docker push $ECR_REPO:1.1"
                 }
             }
         }
