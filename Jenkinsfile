@@ -6,6 +6,7 @@ pipeline {
         IMAGE_NAME = 'java1-app-image'
     }
 
+    
     stages {
         stage('Clone Repository') {
             steps {
