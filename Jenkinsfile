@@ -3,7 +3,7 @@ pipeline {
     environment {
         AWS_REGION = 'us-east-1' 
         ECR_REPO = '879381244497.dkr.ecr.us-east-1.amazonaws.com/jenkins-build' 
-        IMAGE_NAME = 'jenkins-app-image'
+        IMAGE_NAME = 'jenkins1-app-image'
     }
 
     stages {
@@ -34,10 +34,10 @@ pipeline {
                     """
 
                 
-                    sh "sudo docker tag $IMAGE_NAME:latest $ECR_REPO:latest"
+                    sh "docker tag $IMAGE_NAME:latest $ECR_REPO:1.1"
 
               
-                    sh "sudo docker push $ECR_REPO:latest"
+                    sh "docker push $ECR_REPO:1.1"
                 }
             }
         }
