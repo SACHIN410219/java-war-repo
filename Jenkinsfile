@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'javeagent' }
+    agent any
 
     environment {
         AWS_REGION = 'us-east-1' 
