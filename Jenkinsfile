@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'sachin' }
 
     environment {
         AWS_REGION = 'us-east-1' 
@@ -22,7 +22,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "sudo docker build -t $IMAGE_NAME:$BUILD_NUMBER ."
+                sh "sudo docker build -t $IMAGE_NAME:latest ."
             }
         }
 
@@ -35,10 +35,10 @@ pipeline {
                     """
 
                     // Tag the image
-                    sh "sudo docker tag $IMAGE_NAME $ECR_REPO:$BUILD_NUMBER"
+                    sh "sudo docker tag $IMAGE_NAME $ECR_REPO:latest"
 
                     // Push the image
-                    sh "sudo docker push $ECR_REPO:$BUILD_NUMBER"
+                    sh "sudo docker push $ECR_REPO:latest"
                 }
             }
         }
