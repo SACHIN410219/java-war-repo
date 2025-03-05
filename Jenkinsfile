@@ -31,7 +31,7 @@ pipeline {
                 script {
                     // Authenticate with AWS ECR
                     sh """
-                    sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+                    aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin $ECR_REPO
                     """
 
                     // Tag the image
