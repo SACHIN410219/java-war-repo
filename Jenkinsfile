@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-east-1' 
-        ECR_REPO = '879381244497.dkr.ecr.eu-north-1.amazonaws.com/jenkins-build' 
+        ECR_REPO = '879381244497.dkr.ecr.us-east-1.amazonaws.com/jenkins-build' 
         IMAGE_NAME = 'jenkins1-app-image'
     }
 
