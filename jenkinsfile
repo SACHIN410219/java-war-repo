@@ -1,46 +1,70 @@
 pipeline {
-    agent { label 'build-agent' }
-
-    environment {
-        AWS_REGION = 'us-east-1' 
-        ECR_REPO = '761018884776.dkr.ecr.us-east-1.amazonaws.com/ecr-new-repo' 
-        IMAGE_NAME = 'docker-image'
-    }
+    agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
                 git branch: 'main', url: 'https://github.com/Sudharani288/java-war-repo.git'
             }
         }
 
-        stage('Build Java Application') {
-            steps {
-                sh 'mvn clean package -DskipTests' 
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh "sudo docker build -t $IMAGE_NAME ."
-            }
-        }
-
-        stage('Push Image to AWS ECR') {
+        stage('Build Application') {
             steps {
                 script {
-                    // Log in to AWS ECR
-                    sh """
-                    aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin $ECR_REPO
-                    """
-
-                    // Tag the Docker image
-                    sh "sudo docker tag $IMAGE_NAME:latest $ECR_REPO:latest"
-
-                    // Push the Docker image to ECR
-                    sh "sudo docker push $ECR_REPO:latest"
+                    if (fileExists('mvnw')) {
+                        sh 'chmod +x mvnw'  // Ensure the wrapper is executable
+                        sh './mvnw clean package' // Build the application
+                    } else {
+                        error "Maven Wrapper (mvnw) not found! Ensure it exists in the repository."
+                    }
                 }
             }
+        }
+
+        stage('Transfer WAR File to EC2') {
+            steps {
+                script {
+                    sh """
+                        scp -o StrictHostKeyChecking=no -i /path/to/your/private/key.pem target/*.war ec2-user@your.ec2.public.ip:/opt/tomcat/webapps/
+                    """
+                }
+            }
+        }
+
+        stage('Restart Tomcat') {
+            steps {
+                script {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no -i /path/to/your/private/key.pem ec2-user@your.ec2.public.ip << EOF
+                        sudo systemctl restart tomcat
+                        EOF
+                    """
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    sh """
+                        STATUS_CODE=\$(curl -s -o /dev/null -w "%{http_code}" http://your.ec2.public.ip:8080/myapp/)
+                        if [ "\$STATUS_CODE" -ne 200 ]; then
+                            echo "Application deployment failed!"
+                            exit 1
+                        fi
+                        echo "Application deployed successfully!"
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployment successful!"
+        }
+        failure {
+            echo "Deployment failed."
         }
     }
 }
