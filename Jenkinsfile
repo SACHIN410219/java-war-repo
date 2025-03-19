@@ -22,7 +22,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "sudo docker build -t kubernates ."
+                sh "docker build -t kubernates ."
             }
         }
 
