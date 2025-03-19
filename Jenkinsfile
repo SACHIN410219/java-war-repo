@@ -1,9 +1,9 @@
 pipeline {
-    agent { label 'javeagent' }
+    agent any
     environment {
         AWS_REGION = 'us-east-1' 
-        ECR_REPO = '156041435862.dkr.ecr.us-east-1.amazonaws.com/java' 
-        IMAGE_NAME = 'java1-app-image'
+        ECR_REPO = '361769602502.dkr.ecr.us-east-1.amazonaws.com/kubernates' 
+                IMAGE_NAME = 'java1-app-image'
     }
 
     
