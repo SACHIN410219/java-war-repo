@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello WebApp</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+    }
+    img.logo {
+      width: 150px;
+      margin: 20px auto;
+    }
+    img.banner {
+      width: 80%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #response {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <img class="logo" src="images/logo.png" alt="Logo">
+  <h1>Welcome to Hello WebApp</h1>
+  <img class="banner" src="images/banner.jpg" alt="Banner">
+  <p>Click the button to say hello to the server.</p>
+  <button onclick="sayHello()">Say Hello</button>
+  <div id="response"></div>
+
+  <script>
+    function sayHello() {
+      fetch('/hello')
+        .then(response => response.text())
+        .then(data => document.getElementById('response').innerText = data)
+        .catch(err => document.getElementById('response').innerText = 'Error: ' + err);
+    }
+  </script>
+</body>
+</html>
