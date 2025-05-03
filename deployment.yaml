@@ -35,4 +35,4 @@ spec:
   template:
     spec:
       containers:
-        - image: rakesh994/coinbase:64eed9d
+        - image: sachin/coinbase:latest
