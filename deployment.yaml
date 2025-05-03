@@ -14,11 +14,10 @@ spec:
         app: coinbase
     spec:
       containers:
-        - image: rakesh994/http:latest
+        - image: rakesh994/coinbase:a015325
           name: http
           ports:
             - containerPort: 80
-
 ---
 apiVersion: v1
 kind: Service
@@ -30,6 +29,10 @@ spec:
     app: coinbase
   ports:
     - protocol: TCP
-      port: 8080        
-      targetPort: 8080   
-      nodePort: 30080 
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+  template:
+    spec:
+      containers:
+        - image: rakesh994/coinbase:a015325
