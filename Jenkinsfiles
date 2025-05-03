@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'kubernates'
+        DOCKERHUB_REPO = 'rakesh994/coinbase'  // Change this to your actual Docker Hub repo
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Rakesh-k-ops/java-war-repo.git'
+            }
+        }
+
+        stage('Build Java Application') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME} ."
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Tag and Push to Docker Hub') {
+            steps {
+                sh """
+                    docker tag ${IMAGE_NAME}:latest ${DOCKERHUB_REPO}:latest
+                    docker push ${DOCKERHUB_REPO}:latest
+                """
+            }
+        }
+    }
+}
